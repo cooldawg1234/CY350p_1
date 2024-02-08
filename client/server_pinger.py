@@ -14,8 +14,10 @@ def compute_stats(time_deltas):
 
 address = str(input("Enter server IPv4 address: "))
 port = int(input("Enter server port number: "))
+print()
 
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as cs:
+    
     try: 
         cs.connect((address, port))
         cs.settimeout(1)
@@ -41,20 +43,20 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as cs:
                 print(f"ping {sequence_number} No Response")
                 noResp += 1
         
-        print(f"Pings sent: {pings}")
+        print(f"\nPings sent: {pings}")
         print(f"Responses: {pings-noResp}")
-        print(f"Success rate: {(pings-noResp)/pings}%")
+        print(f"Success rate: {(pings-noResp)/pings*100}%")
         if len(tds) != 0:
             stats = compute_stats(tds)
-            print(f"Max RTT: {stats[0]} ms\n"
-                  +"Min RTT: {stats[1]} ms\n" +
-                   "Average RTT: {stats[2]} ms")
+            print(f"Max RTT: {stats[0]} ms\n" +
+                  f"Min RTT: {stats[1]} ms\n" +
+                  f"Average RTT: {stats[2]} ms")
 
 
     except Exception as e:
         print("Connection to server failed: ", e)
 
     finally:
-        if noResp==10:
+        if noResp == 10:
                 print("No response from server")
         print("Closing Connection")
